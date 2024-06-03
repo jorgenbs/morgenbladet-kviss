@@ -6,14 +6,22 @@ DATA=$(curl $QUERY | jq ".content_elements[0]")
 ID=$(echo $DATA | jq -r "._id")
 
 
-if ! jq --arg id "$ID" -e '.content_elements[] | select(._id == $id)' $DUMP_FILE > /dev/null; then
+if ! jq --arg id "$ID" -e '.[] | select(._id == $id)' $DUMP_FILE > /dev/null; then
     echo "New element found: $ID"
     echo $DATA
     # Prepend the new element
     TEMP_FILE=$(mktemp)
     jq --argjson new "$DATA" '[$new] + .content_elements' $DUMP_FILE > $TEMP_FILE && mv $TEMP_FILE $DUMP_FILE
-    # jq --argjson newElement "$DATA" '[$newElement] + .' "$DUMP_FILE" > "$TEMP_FILE" && mv "$TEMP_FILE" "$DUMP_FILE"
 
 else
     echo "No new elements found"
 fi
+
+# get quiz slug
+ARTICLE_URL=https://www.morgenbladet.no$(cat $DUMP_FILE | jq -r ".[0].websites.morgenbladet.website_url")
+SLUG=$(curl $ARTICLE_URL | sed -n 's/.*kviss\.morgenbladet\.no\/\([^"]*\)".*/\1/p' | sed 's/\\//g')
+QUIZ_URL=https://kviss-admin-api.morgenbladet.no/api/quiz/slug/$SLUG
+
+# store quiz-data
+echo "const kviss = " > docs/kviss.js
+QUIZ_DATA=$(curl -H "Content-Type: application/json" $QUIZ_URL >> docs/kviss.js)
