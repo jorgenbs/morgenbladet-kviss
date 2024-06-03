@@ -8,9 +8,11 @@ ID=$(echo $DATA | jq -r "._id")
 
 if ! jq --arg id "$ID" -e '.content_elements[] | select(._id == $id)' $DUMP_FILE > /dev/null; then
     echo "New element found: $ID"
+    echo $DATA
     # Prepend the new element
     TEMP_FILE=$(mktemp)
-    jq --argjson newElement "$DATA" '[$newElement] + .' "$DUMP_FILE" > "$TEMP_FILE" && mv "$TEMP_FILE" "$DUMP_FILE"
+    jq --argjson new "$DATA" '[$new] + .content_elements' $DUMP_FILE > $TEMP_FILE && mv $TEMP_FILE $DUMP_FILE
+    # jq --argjson newElement "$DATA" '[$newElement] + .' "$DUMP_FILE" > "$TEMP_FILE" && mv "$TEMP_FILE" "$DUMP_FILE"
 
 else
     echo "No new elements found"
