@@ -1,0 +1,9 @@
+name: update-podcast-feeds
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 * * * *"
+
+jobs:
+  update-quiz:
