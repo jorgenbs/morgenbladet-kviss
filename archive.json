@@ -24,6 +24,30 @@
     }
   },
   {
+    "_id": "SXWKZI3OHRBV5C5IIUSC7VLDPQ",
+    "content_restrictions": {
+      "content_code": "1"
+    },
+    "display_date": "2024-05-30T22:05:00Z",
+    "headlines": {
+      "basic": "Kviss, uke 22",
+      "original": "Kviss, uke 22",
+      "print": "",
+      "web": ""
+    },
+    "subtype": "quiz",
+    "type": "story",
+    "websites": {
+      "morgenbladet": {
+        "website_section": {
+          "_id": "/pafyll/kviss",
+          "name": "Kviss"
+        },
+        "website_url": "/pafyll/kviss/2024/05/31/kviss-uke-22/"
+      }
+    }
+  },
+  {
     "_id": "CJ7UZD7NAJFFJI55H2C3VGKTF4",
     "credits": {
       "by": [

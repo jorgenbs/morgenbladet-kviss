@@ -15,9 +15,6 @@ ID=$(echo $DATA | jq -r "._id")
 NAME=$(echo $DATA | jq -r ".headlines.basic")
 
 if ! jq --arg id "$ID" -e '.[] | select(._id == $id)' $DUMP_FILE > /dev/null; then
-    message="New quiz found: $NAME"
-    echo $message
-
     # # Update dump file
     TEMP_FILE=$(mktemp)
     jq --argjson new "$DATA" '[$new] + .' $DUMP_FILE > $TEMP_FILE && mv $TEMP_FILE $DUMP_FILE
@@ -33,7 +30,11 @@ if ! jq --arg id "$ID" -e '.[] | select(._id == $id)' $DUMP_FILE > /dev/null; th
     echo "const kviss = " > docs/kviss.js
     QUIZ_DATA=$(curl -H "Content-Type: application/json" $QUIZ_API_CALL >> docs/kviss.js)
 
-    curl -d $message https://ntfy.sh/jorgen
+    # Push message
+    message="Ny kviss: $NAME"
+    curl \
+        -H "Click: https://jorgenbs.github.io/morgenbladet-kviss/" \
+        -d "$message" https://ntfy.sh/mbkviss
 else
     echo "No new elements found"
 fi
