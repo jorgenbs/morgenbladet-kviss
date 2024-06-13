@@ -16,13 +16,14 @@ NAME=$(echo $DATA | jq -r ".headlines.basic")
 
 # if id not in archive its a new quiz
 if ! jq --arg id "$ID" -e '.[] | select(._id == $id)' $ARCHIVE_FILE > /dev/null; then
+    # Dumb and simple: Use curl quiz slug from response (its not behind paywall)
+    ARTICLE_URL=https://www.morgenbladet.no$(echo $DATA | jq -r ".websites.morgenbladet.website_url")
+    echo $ARTICLE_URL
+    SLUG=$(curl $ARTICLE_URL | sed -n 's/.*kviss\.morgenbladet\.no\/\([^"]*\)".*/\1/p' | sed 's/\\//g')
+
     # # Update archive
     TEMP_FILE=$(mktemp)
-    jq --argjson new "$DATA" '[$new] + .' $ARCHIVE_FILE > $TEMP_FILE && mv $TEMP_FILE $ARCHIVE_FILE
-
-    # Dumb and simple: Use curl quiz slug from response (its not behind paywall)
-    ARTICLE_URL=https://www.morgenbladet.no$(cat $ARCHIVE_FILE | jq -r ".[0].websites.morgenbladet.website_url")
-    SLUG=$(curl $ARTICLE_URL | sed -n 's/.*kviss\.morgenbladet\.no\/\([^"]*\)".*/\1/p' | sed 's/\\//g')
+    jq --argjson slug "{\"quiz_slug\": \"$SLUG\"}" --argjson new "$DATA" '[$new + $slug] + .' $ARCHIVE_FILE > $TEMP_FILE && mv $TEMP_FILE $ARCHIVE_FILE
 
     # Use slug to forward to the quiz webapp (which is also open)
     echo "window.location = 'https://kviss.morgenbladet.no/${SLUG}'" > docs/kviss.js
