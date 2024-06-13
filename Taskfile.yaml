@@ -1,0 +1,9 @@
+version: "3"
+
+tasks:
+  build-db:
+    dir: ./kviss-db
+    cmds:
+      - cargo build --release 
+      - cp ./target/release/kviss-db ../scripts/kviss-db
+    silent: true

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DUMP_FILE="./archive.json"
+ARCHIVE_FILE="./archive.json"
 FEEDSIZE=1
 
 # {"_id":"","content_alias":"pafyll","feature":"top-table-list","from":0,"size":1}
@@ -14,15 +14,17 @@ DATA=$(curl $API_CALL | jq ".content_elements[0]")
 ID=$(echo $DATA | jq -r "._id")
 NAME=$(echo $DATA | jq -r ".headlines.basic")
 
-if ! jq --arg id "$ID" -e '.[] | select(._id == $id)' $DUMP_FILE > /dev/null; then
-    # # Update dump file
+# if id not in archive its a new quiz
+if ! jq --arg id "$ID" -e '.[] | select(._id == $id)' $ARCHIVE_FILE > /dev/null; then
+    # # Update archive
     TEMP_FILE=$(mktemp)
-    jq --argjson new "$DATA" '[$new] + .' $DUMP_FILE > $TEMP_FILE && mv $TEMP_FILE $DUMP_FILE
+    jq --argjson new "$DATA" '[$new] + .' $ARCHIVE_FILE > $TEMP_FILE && mv $TEMP_FILE $ARCHIVE_FILE
 
-    # # get quiz slug and make quiz api call
-    ARTICLE_URL=https://www.morgenbladet.no$(cat $DUMP_FILE | jq -r ".[0].websites.morgenbladet.website_url")
+    # Dumb and simple: Use curl quiz slug from response (its not behind paywall)
+    ARTICLE_URL=https://www.morgenbladet.no$(cat $ARCHIVE_FILE | jq -r ".[0].websites.morgenbladet.website_url")
     SLUG=$(curl $ARTICLE_URL | sed -n 's/.*kviss\.morgenbladet\.no\/\([^"]*\)".*/\1/p' | sed 's/\\//g')
 
+    # Use slug to forward to the quiz webapp (which is also open)
     echo "window.location = 'https://kviss.morgenbladet.no/${SLUG}'" > docs/kviss.js
 
     # Push message
@@ -30,6 +32,8 @@ if ! jq --arg id "$ID" -e '.[] | select(._id == $id)' $DUMP_FILE > /dev/null; th
     curl \
         -H "Click: https://jorgenbs.github.io/morgenbladet-kviss/" \
         -d "$message" https://ntfy.sh/mbkviss
+
+    echo $SLUG
 else
-    echo "No new elements found"
+    exit 1
 fi
