@@ -7,7 +7,7 @@ FEEDSIZE=1
 QUERY="%7B%22_id%22%3A%22%22%2C%22content_alias%22%3A%22pafyll%22%2C%22feature%22%3A%22top-table-list%22%2C%22from%22%3A0%2C%22size%22%3A1%7D"
 # {content_elements{_id,content_restrictions{content_code},display_date,embed_html,headlines{basic,original,print,web},subtype,type,websites{morgenbladet{website_section{_id,name},website_url}}}}
 FILTER="%7Bcontent_elements%7B_id%2Ccontent_restrictions%7Bcontent_code%7D%2Cdisplay_date%2Cembed_html%2Cheadlines%7Bbasic%2Coriginal%2Cprint%2Cweb%7D%2Csubtype%2Ctype%2Cwebsites%7Bmorgenbladet%7Bwebsite_section%7B_id%2Cname%7D%2Cwebsite_url%7D%7D%7D%7D"
-API_CALL="https://www.morgenbladet.no/pf/api/v3/content/fetch/mentor-api-collections?query=${QUERY}&filter=${FILTER}&d=336&_website=morgenbladet"
+API_CALL="https://www.morgenbladet.no/pf/api/v3/content/fetch/mentor-api-collections?query=${QUERY}&filter=${FILTER}&_website=morgenbladet"
 
 DATA=$(curl $API_CALL | jq ".content_elements[0]")
 
