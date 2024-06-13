@@ -22,13 +22,8 @@ if ! jq --arg id "$ID" -e '.[] | select(._id == $id)' $DUMP_FILE > /dev/null; th
     # # get quiz slug and make quiz api call
     ARTICLE_URL=https://www.morgenbladet.no$(cat $DUMP_FILE | jq -r ".[0].websites.morgenbladet.website_url")
     SLUG=$(curl $ARTICLE_URL | sed -n 's/.*kviss\.morgenbladet\.no\/\([^"]*\)".*/\1/p' | sed 's/\\//g')
-    QUIZ_API_CALL="https://kviss-admin-api.morgenbladet.no/api/quiz/slug/$SLUG"
 
-    echo $QUIZ_API_CALL
-
-    # # store quiz-data
-    echo "const kviss = " > docs/kviss.js
-    QUIZ_DATA=$(curl -H "Content-Type: application/json" $QUIZ_API_CALL >> docs/kviss.js)
+    echo "window.location = 'https://kviss.morgenbladet.no/${SLUG}'" > docs/kviss.js
 
     # Push message
     message="Ny kviss: $NAME"
