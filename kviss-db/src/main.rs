@@ -58,6 +58,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
+    println!(
+        "Successfully inserted {} questions into db from slug {}",
+        question_answer_pairs.len(),
+        args.slug
+    );
+
     Ok(())
 }
 
