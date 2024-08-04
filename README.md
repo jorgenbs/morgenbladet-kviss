@@ -1,6 +1,6 @@
 ## Readme
 
-Jeg vet ikke helt hva hensikten med dette er, jeg betaler for Morgenbladet. Men det er et påfunn for å lære litt Rust, og for å samle opp en lokal dritvanskelig quiz-database (ikke delt her).
+Jeg vet ikke helt hva hensikten med dette er, men det er et påfunn for å lære litt Rust, og for å samle opp en lokal dritvanskelig quiz-database (ikke delt her).
 
 
 ### Innhold/features
