@@ -1,5 +1,30 @@
 [
   {
+    "_id": "5HBQL5PKAVBULISRYPUVNM7LUE",
+    "content_restrictions": {
+      "content_code": "1"
+    },
+    "display_date": "2024-10-11T07:20:32.218Z",
+    "headlines": {
+      "basic": "Kviss, uke 41",
+      "original": "Kviss, uke 41",
+      "print": "",
+      "web": ""
+    },
+    "subtype": "quiz",
+    "type": "story",
+    "websites": {
+      "morgenbladet": {
+        "website_section": {
+          "_id": "/pafyll/kviss",
+          "name": "Kviss"
+        },
+        "website_url": "/pafyll/kviss/2024/10/11/kviss-uke-41/"
+      }
+    },
+    "quiz_slug": "kviss-uke-41-2024-r8fjpe"
+  },
+  {
     "_id": "O43LN3HP2NCZLJKFDS3ED7AUA4",
     "content_restrictions": {
       "content_code": "1"
