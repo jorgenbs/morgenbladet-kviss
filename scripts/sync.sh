@@ -42,6 +42,9 @@ if ! jq --arg id "$ID" -e '.[] | select(._id == $id)' $ARCHIVE_FILE > /dev/null;
         -H "Click: https://jorgenbs.github.io/morgenbladet-kviss/" \
         -d "$message" https://ntfy.sh/mbkviss
 
+    # Add questions to db
+    ./scripts/kviss-db --slug $SLUG
+
     echo $SLUG
 else
     exit 1

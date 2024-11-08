@@ -3,7 +3,7 @@ name: update-latest-quiz
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 8 * * 5"
+    - cron: "0 9 * * 5"
 
 jobs:
   update-quiz:
