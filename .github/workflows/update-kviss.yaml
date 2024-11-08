@@ -43,6 +43,8 @@ jobs:
           ./target/release/kviss-db --slug "$SLUG"
 
       - name: Make thematic image
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           ./scripts/image-gen.sh "$SLUG"
 

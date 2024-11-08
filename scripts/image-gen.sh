@@ -1,6 +1,6 @@
 if [ $# -eq 0 ]; then
   echo "Available slugs:"
-  sqlite3 db.sqlite "SELECT DISTINCT slug FROM quiz_entry ORDER BY id DESC LIMIT 20" | while read -r slug; do
+  sqlite3 ./kviss-db/db.sqlite "SELECT DISTINCT slug FROM quiz_entry ORDER BY id DESC LIMIT 20" | while read -r slug; do
     echo "- $slug"
   done
   read -p "Please enter a slug from the above list: " SLUG
@@ -8,7 +8,7 @@ else
   SLUG=$1
 fi
 
-DB=$(sqlite3 db.sqlite "SELECT 'question: ' || question || ' answer: ' || answer FROM quiz_entry WHERE slug='$SLUG'")
+DB=$(sqlite3 ./kviss-db/db.sqlite "SELECT 'question: ' || question || ' answer: ' || answer FROM quiz_entry WHERE slug='$SLUG'")
 RESPONSE=$(curl -s https://api.openai.com/v1/chat/completions \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $OPENAI_API_KEY" \
