@@ -1,4 +1,5 @@
 #!/bin/bash
+set -eu
 
 ARCHIVE_FILE="./archive.json"
 FEEDSIZE=1
@@ -10,7 +11,7 @@ FILTER="%7Bcontent_elements%7B_id%2Ccontent_restrictions%7Bcontent_code%7D%2Cdis
 API_CALL="https://www.morgenbladet.no/pf/api/v3/content/fetch/mentor-api-collections?query=${QUERY}&filter=${FILTER}&_website=morgenbladet"
 
 # filter by subtype quiz and take first element
-DATA=$(curl $API_CALL | jq '[.content_elements[] | select(.subtype=="quiz")][0]')
+DATA=$(curl -s $API_CALL | jq '[.content_elements[] | select(.subtype=="quiz")][0]')
 
 
 ID=$(echo $DATA | jq -r "._id")
@@ -20,8 +21,7 @@ NAME=$(echo $DATA | jq -r ".headlines.basic")
 if ! jq --arg id "$ID" -e '.[] | select(._id == $id)' $ARCHIVE_FILE > /dev/null; then
     # Dumb and simple: Use curl quiz slug from response (its not behind paywall)
     ARTICLE_URL=https://www.morgenbladet.no$(echo $DATA | jq -r ".websites.morgenbladet.website_url")
-    echo $ARTICLE_URL
-    SLUG=$(curl $ARTICLE_URL | sed -n 's/.*kviss\.morgenbladet\.no\/\([^"]*\)".*/\1/p' | sed 's/\\//g')
+    SLUG=$(curl -s $ARTICLE_URL | sed -n 's/.*kviss\.morgenbladet\.no\/\([^"]*\)".*/\1/p' | sed 's/\\//g')
 
     # no slug means something went wrong
     if [ -z "$SLUG" ]; then
@@ -38,12 +38,8 @@ if ! jq --arg id "$ID" -e '.[] | select(._id == $id)' $ARCHIVE_FILE > /dev/null;
 
     # Push message
     message="Ny kviss: $NAME"
-    curl \
-        -H "Click: https://jorgenbs.github.io/morgenbladet-kviss/" \
-        -d "$message" https://ntfy.sh/mbkviss
 
-    # Add questions to db
-    ./scripts/kviss-db --slug $SLUG
+    curl -H "Click: https://jorgenbs.github.io/morgenbladet-kviss/" -s -d "$message" https://ntfy.sh/mbkviss > /dev/null
 
     echo $SLUG
 else

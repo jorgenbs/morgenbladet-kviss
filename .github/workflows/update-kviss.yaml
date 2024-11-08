@@ -17,19 +17,36 @@ jobs:
         run: |
           OUTPUT=$(./scripts/sync.sh)
           echo "$OUTPUT"
-          echo "slug=$OUTPUT" >> $GITHUB_ENV
+          echo "SLUG=$OUTPUT" >> $GITHUB_ENV
 
       - name: Check for changes
         id: check_changes
         run: |
-          git diff --exit-code || echo "has_changes=true" >> $GITHUB_ENV
+          git diff --exit-code && exit 1 || exit 0
+
+      - name: Install latest rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          default: true
+          override: true
+
+      - name: Setup go-task
+        uses: pnorton5432/setup-task@v1
+        with:
+          task-version: 3.29.1
+
+      - name: Save questions
+        run: |
+          cd kviss-db
+          cargo build --release 
+          ./target/release/kviss-db --slug "$SLUG"
 
       - name: Make thematic image
         run: |
-          ./scripts/image-gen.sh $SLUG
+          ./scripts/image-gen.sh "$SLUG"
 
       - name: Commit and push changes
-        if: env.has_changes == 'true'
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
