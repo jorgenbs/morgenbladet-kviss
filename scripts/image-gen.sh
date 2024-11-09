@@ -46,5 +46,8 @@ if [ "$IMAGE_URL" = "null" ]; then
   echo $IMAGE_RESPONSE
   exit 1
 else
-  curl $IMAGE_URL -o docs/generated.png
+  DATE=$(date +%Y-%m-%d)
+  NEW_IMAGE=docs/generated_$DATE.png
+  curl $IMAGE_URL -o $NEW_IMAGE
+  cp $NEW_IMAGE docs/generated.png
 fi
