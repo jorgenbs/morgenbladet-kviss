@@ -1,1 +1,1 @@
-window.location = 'https://kviss.morgenbladet.no/kviss-uke-45-2024'
+window.location = 'https://kviss.morgenbladet.no/uke-462024-f9k08'
