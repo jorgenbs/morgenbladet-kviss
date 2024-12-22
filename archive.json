@@ -1,5 +1,30 @@
 [
   {
+    "_id": "H7V4MZQUINFU5GHRD7I6XHEZEQ",
+    "content_restrictions": {
+      "content_code": "1"
+    },
+    "display_date": "2024-12-19T23:05:00Z",
+    "headlines": {
+      "basic": "Julekviss, 2024",
+      "original": "Julekviss, 2024",
+      "print": "",
+      "web": ""
+    },
+    "subtype": "quiz",
+    "type": "story",
+    "websites": {
+      "morgenbladet": {
+        "website_section": {
+          "_id": "/pafyll/kviss",
+          "name": "Kviss"
+        },
+        "website_url": "/pafyll/kviss/2024/12/20/julekviss-2024/"
+      }
+    },
+    "quiz_slug": "kviss-uke-51-ovbng"
+  },
+  {
     "_id": "ZWYAEPJ5HZCFVIKN7RYKIN25SQ",
     "content_restrictions": {
       "content_code": "1"
