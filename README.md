@@ -2,6 +2,12 @@
 
 Morgenbladet har endret kviss-appen sin, så alt dette funker ikke lengre.
 
+historikk: `db.sqlite`
+
+```
+quiz_entry (id INTEGER PRIMARY KEY AUTOINCREMENT, question TEXT, answer TEXT, slug TEXT);
+```
+
 ## Quiz fra Morgenbladet
 
 Hver fredag kjøres en jobb:
