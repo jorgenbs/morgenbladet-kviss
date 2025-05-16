@@ -1,3 +1,7 @@
+# 🚧 Funker ikke lengre
+
+Morgenbladet har endret kviss-appen sin, så alt dette funker ikke lengre.
+
 ## Quiz fra Morgenbladet
 
 Hver fredag kjøres en jobb:
